@@ -1,0 +1,100 @@
+class node {
+public:
+    int val;
+    node* next;
+    node(int val) {
+        this->val = val;
+        this->next = NULL;
+    }
+};
+
+class MyLinkedList {
+public:
+    node* head;
+    node* tail;
+    int size;
+
+    MyLinkedList() {
+        this->head = NULL;
+        this->tail = NULL;
+        this->size = 0;
+    }
+
+    int get(int index) {
+        if (index < 0 || index >= size) return -1;
+        node* tmp = head;
+        for (int i = 0; i < index; i++) {
+            tmp = tmp->next;
+        }
+        return tmp->val;
+    }
+
+    void addAtHead(int val) {
+        node* newnode = new node(val);
+        newnode->next = head;
+        head = newnode;
+        size++;
+        if (tail == NULL) {
+            tail = head;
+        }
+    }
+
+    void addAtTail(int val) {
+        node* newnode = new node(val);
+        if (head == NULL) {
+            head = newnode;
+            tail = newnode;
+        } else {
+            tail->next = newnode;
+            tail = newnode;
+        }
+        size++;
+    }
+
+    void addAtIndex(int index, int val) {
+        node* newnode = new node(val);
+        if (index == 0) {
+            addAtHead(val);
+        } else if (index == size) {
+            addAtTail(val);
+        } else if (index > size) {
+            return;
+        } else {
+            node* tmp = head;
+            for (int i = 0; i < index - 1; i++) {
+                tmp = tmp->next;
+            }
+            newnode->next = tmp->next;
+            tmp->next = newnode;
+            size++;
+        }
+    }
+
+    void deleteAtIndex(int index) {
+        if (index >= size || index < 0) return;
+        if (index == 0) {
+            node* deletenode = head;
+            head = head->next;
+            if (head == NULL) {
+                tail = NULL;
+            }
+            delete deletenode;
+            size--;
+        } else {
+            node* tmp = head;
+            for (int i = 0; i < index - 1; i++) {
+                tmp = tmp->next;
+            }
+            node* del = tmp->next;
+            if (del == NULL) {
+                return;
+            }
+            tmp->next = tmp->next->next;
+            if (tmp->next == NULL) {
+                tail = tmp;
+            }
+            delete del;
+            size--;
+        }
+    }
+};
